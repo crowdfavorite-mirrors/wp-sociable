@@ -1,18 +1,29 @@
 <?php
 
+
+
 /*
 
+
+
  * The Output And Shortcode Functions For sociable
+
+
 
  */
 
 /*
 
+
+
  * Returns The Skyscraper Output For The Global $post Object Do Not 
+
+
 
  */
 
 function diff_date($date1, $date2){
+
 
 
 	$date1 = mktime(substr($date1,8,2), substr($date1,10,2), substr($date1,12,2), substr($date1,4,2), substr($date1,6,2), substr($date1,0,4));
@@ -20,9 +31,13 @@ function diff_date($date1, $date2){
 	$date2 = mktime(substr($date2,8,2), substr($date2,10,2), substr($date2,12,2), substr($date2,4,2), substr($date2,6,2), substr($date2,0,4));
 
 
+
 	$diff_time = ceil((($date2 - $date1)/60));
 
 	return $diff_time;
+
+
+
 }
 
  
@@ -34,10 +49,6 @@ function skyscraper_html( $where = "" ){
     global $skyscraper_options, $wp_query; 
 
 	if (!is_admin() || 1==1){
-
-				
-
-		
 
 	//	echo "<script type='text/javascript'>";
 
@@ -93,36 +104,49 @@ function skyscraper_html( $where = "" ){
 
 		}		
 
-		
-
 		$url_site= $_SERVER["HTTP_HOST"].$_SERVER["REQUEST_URI"];
 
-				
-
 		$script = "	
-		   
-			
-		
-				
+
+
+
 	 			if (!document.getElementById('fb-root')){
+
+
 
 					var div = document.createElement('div');
 
+
+
 					div.id = 'fb-root';
 
+
+
 					document.body.appendChild(div);
+
+
 
 				}
 
 				(function(d, s, id) {
 
+
+
 				  var js, fjs = d.getElementsByTagName(s)[0];
+
+
 
 				  if (d.getElementById(id)) return;
 
+
+
 				  js = d.createElement(s); js.id = id;
 
+
+
 				  js.src = \"http://connect.facebook.net/en_US/all.js#xfbml=1\";
+
+
 
 				  fjs.parentNode.insertBefore(js, fjs);
 
@@ -131,120 +155,392 @@ function skyscraper_html( $where = "" ){
 
 
 			
+
+
+
 			".$addWhere."
+
+
+
+ 
+
+
 
 			jQuery(document).ready(function(){						
 
 						oPlugin.toolbarStart('skyscraper', ".$widget_position.",230,".$widget_width.",'".$background_color."','".$labels_color."',false,'#6A6A6A',".$text_size.",'#587cc8');
-										 	
+
+
+
+									 	
+
+
+
 						".get_share_node()."
+
+
 
 						".get_counters_node()."			
 
+
+
 						".get_social_banner_node()."		
+
+
 
 						".get_latest_node()."															
 
+
+
 						".get_mentions_node()."										
 
+
+
 						".get_follow_us_node()."										
-					
+
+
+
 						".get_rss_node()."
-  
+
+
+
 						oPlugin.CreateGoToTop('New_Id_12','Top','<img src=\"".SOCIABLE_HTTP_PATH."images/toolbar/gototop.png\" style=\"width:30px;\" />');						
 
 						oPlugin.CreateGoToHome('New_Id_13','Go Home','<img src=\"".SOCIABLE_HTTP_PATH."images/toolbar/gotohome.png\" style=\"width:30px;\" />');												
 
-	    });
-			
+
+
+	    }); 	
+
+
+
+					jQuery('.title').css('font-size', '".$text_size."px');		
+
+
+
+ 
+
+
+
 		";
 
+
+
 		echo $script;
+
+
+
 	}
+
+
 
 }
 
 function get_social_banner_node(){
+
+
+
 	
+
+
+
 	
+
+
+
 	global $skyscraper_options;
 
 	global $title_shared;
 
 	global $url_shares;	
+
+
+
 	
+
+
+
 	$social_banner_node = "";
+
+
+
 	
+
+
+
 	
+
+
+
 	if(!empty($skyscraper_options["sociable_banner"])){
+
+
+
 	
+
+
+
 		$follow_us = sc_follow_links(1);
+
+
+
 		
+
+
+
 		$follow_buttons = $follow_us["follow_buttons"];
+
+
+
  
+
+
+
 		$follow_us_count = $follow_us["count"];
-		
+
 		$width_banner = 200;
-			 
+
+		$tag_banner = '';
+		
+		if (isset($skyscraper_options["blogplay_tags"])){
+			
+			if (!empty($skyscraper_options["blogplay_tags"])){
+				
+				$tag_banner = '<blogplay.com>';
+			}
+		}	 
+
+
+
 		$social_banner_node = " var url = '". addslashes(trim($url_shares))."';
+
+
+
 								var title = '".addslashes(trim($title_shared)) ."';	
+
+
+
 								var counter =	'<ul class=\"boxBanner_ul\">';				
+
+
+
 								counter += '	<li>';			
+
+
+
 								counter += '	<div class=\"fb-like\" data-send=\"false\" data-layout=\"box_count\" data-width=\"50\" data-href=\"'+url+'\" data-show-faces=\"false\"></div>';
+
+
+
 								
+
+
+
 								counter += '	</li>';			
+
+
+
 								counter += '	<li>';						
+
+
+
 								counter += '	<iframe width=\"100%\" scrolling=\"no\" frameborder=\"0\" title=\"+1\" vspace=\"0\" tabindex=\"-1\" style=\"position: static; left: 0pt; top: 0pt; width: 60px; margin: 0px; border-style: none; visibility: visible; height: 60px;\" src=\"https://plusone.google.com/_/+1/fastbutton?url='+url+'&amp;size=tall&amp;count=true&amp;hl=en-US&amp;jsh=m%3B%2F_%2Fapps-static%2F_%2Fjs%2Fgapi%2F__features__%2Frt%3Dj%2Fver%3Dt1NEBxIt2Qs.es_419.%2Fsv%3D1%2Fam%3D!Xq7AzNfn9_-I0e5PyA%2Fd%3D1%2F#id=I1_1328906079806&amp;parent='+url+'&amp;rpctoken=615138222&amp;_methods=onPlusOne%2C_ready%2C_close%2C_open%2C_resizeMe%2C_renderstart\" name=\"I1_1328906079806\" marginwidth=\"0\" marginheight=\"0\" id=\"I1_1328906079806\" hspace=\"0\" allowtransparency=\"true\"></iframe>';
+
+
+
 								counter += '	</li>';							
+
+
+
 								counter += '	<li>';					
-								counter += '<iframe scrolling=\"no\" frameborder=\"0\" allowtransparency=\"true\" src=\"http://platform.twitter.com/widgets/tweet_button.1326407570.html#_=1328815234500&amp;_version=2&amp;count=vertical&amp;enableNewSizing=false&amp;id=twitter-widget-0&amp;lang=en&amp;original_referer=+url+&amp;&amp;size=m&amp;text='+title+'  <sociable> blogplay.com&amp;url='+url+'&amp;via=sociablesite\" class=\"twitter-share-button twitter-count-vertical\" style=\"width: 55px; height: 62px;\" title=\"Twitter Tweet Button\"></iframe>';						
+
+
+
+								counter += '<iframe scrolling=\"no\" frameborder=\"0\" allowtransparency=\"true\" src=\"https://platform.twitter.com/widgets/tweet_button.html?_version=2&amp;count=vertical&amp;enableNewSizing=false&amp;id=twitter-widget-6&amp;lang=en&amp;original_referer='+url+'&amp;size=m&amp;text='+title+' ".$tag_banner." &amp;url='+url+'\" class=\"twitter-share-button twitter-count-vertical\" style=\"width: 55px; height: 62px;\" title=\"Twitter Tweet Button\"></iframe>';						
+
+
+
 								counter += '	</li>';
+
+
+
 								counter += '</ul>';";
+
+
+
 								
+
+
+
 		if ($follow_us_count > 0){
+
+
+
 				 
+
+
+
 				$social_banner_node .= "
+
+
+
 						counter += '<ul class=\"boxBanner_ul_margin\">';
+
+
+
 						counter += '<li>';
+
+
+
 						counter += '</li>';	
+
+
+
 						counter += '</ul>';";
+
+
+
 						
+
+
+
 				$social_banner_node .= " counter += '".$follow_buttons."'; ";
+
+
+
 				
+
+
+
 				if ($follow_us_count > 1){
+
+
+
 				
+
+
+
 					$width_banner = $width_banner + (70 * $follow_us_count);
+
+
+
 				}
+
+
+
 				else{
+
+
+
 					$width_banner = $width_banner + (90 * $follow_us_count);
+
+
+
 				}
+
+
+
 				
+
+
+
 				
+
+
+
 		}			 			
+
+
+
 					  			
+
+
+
 		$label_text = trim($skyscraper_options["sociable_banner_text"]);
+
+
+
 		
+
+
+
 		if (strlen($label_text) > 35){
+
+
+
 		//	$label_text = substr($label_text,0,35);
+
+
+
 		}						
+
+
+
 		$label_text = addslashes($label_text);
+
+
+
 		 
+
+
+
 		$social_banner_node .= "oPlugin.CreateNode('New_Id_14','".$label_text."', '',  counter,'banner',80,".$width_banner.");";	
+
+
+
 		$timer = ($skyscraper_options["sociable_banner_timer"] * 1000);
+
+
+
 		
+
+
+
 		$colorBack = $skyscraper_options["sociable_banner_colorBack"];
+
+
+
 		$colorFont = $skyscraper_options["sociable_banner_colorFont"];
+
+
+
 		$colorLabel = $skyscraper_options["sociable_banner_colorLabel"];
+
+
+
 		$fontSize = $skyscraper_options["sociable_banner_fontSize"];
+
+
+
 		
+
+
+
 		$social_banner_node .="setTimeout('showBanner(".$timer.",\"".$colorBack."\", \"".$colorLabel."\", \"".$colorFont."\", \"".$fontSize."\")', ".$timer.");";
+
+
+
 				
+
+
+
 	}	
+
+
+
 		
+
+
+
 	return $social_banner_node;
+
+
+
 }
 
 function get_rss_node(){
+
+
 
 	$rss_node = "";
 
@@ -253,6 +549,32 @@ function get_rss_node(){
 	global $skyscraper_options;
 
 	
+
+	
+
+	if (!empty($skyscraper_options["accept_read_rss"])){
+
+
+
+		if ($skyscraper_options["accept_read_rss"] != 1){
+
+	
+
+			return $rss_node;
+
+		}
+
+	}
+
+	else{
+
+
+
+		return $rss_node;
+
+	}
+
+		
 
 	$version = phpversion();
 
@@ -362,7 +684,9 @@ function get_rss_node(){
 
 					oPlugin.CreateNode('New_Id_5','Posts','',LatestBlogPostContent,'Notice',220,460);";
 
-	}				
+	}
+
+					
 
 	return $rss_node;
 
@@ -370,11 +694,39 @@ function get_rss_node(){
 
 function get_latest_node(){
 
+
+
 	$latest_node = "";	
 
 	global $skyscraper_options;	
 
 	
+
+	if (!empty($skyscraper_options["accept_read_twitter"])){
+
+
+
+		if ($skyscraper_options["accept_read_twitter"] != 1){
+
+	
+
+			return $latest_node;
+
+		}
+
+	}
+
+	else{
+
+
+
+		return $latest_node;
+
+	}
+
+	
+
+		
 
 	if ( isset($skyscraper_options["twitter_username"])){
 
@@ -391,7 +743,13 @@ function get_latest_node(){
 			
 
 				$latest_node = "
+
+
+
 				
+
+
+
 					var LastestTwittsContent = [
 
 													".$latest_tweets."	
@@ -412,7 +770,11 @@ function get_latest_node(){
 
 }
 
+ 
+
 function get_mentions_node(){
+
+
 
 	$mentions_node = "";
 
@@ -421,6 +783,32 @@ function get_mentions_node(){
 	global $skyscraper_options;
 
 	
+
+	if (!empty($skyscraper_options["accept_read_twitter"])){
+
+
+
+		if ($skyscraper_options["accept_read_twitter"] != 1){
+
+	
+
+			return $mentions_node;
+
+		}
+
+	}
+
+	else{
+
+	
+
+		return $mentions_node;
+
+	}
+
+	
+
+		
 
 	if ( isset($skyscraper_options["twitter_username"])){
 
@@ -467,29 +855,66 @@ function get_counters_node(){
 	$counters_node = "";
 
 
-	if ((!empty($skyscraper_options["counters"]["check"]))){
 
+	if ((!empty($skyscraper_options["counters"]["check"]))){
+		
+		
+		$tag_counter = '';
+		
+		if (isset($skyscraper_options["blogplay_tags"])){
+		
+			if (!empty($skyscraper_options["blogplay_tags"])){
+				
+				$tag_counter = '(blogplay.com)';
+			}
+		}
 		 
 
 		$counters_node = " var url = '". addslashes(trim($url_shares))."';
 
 							var title = '".addslashes(trim($title_shared)) ."';	";
+
+
+
 								
+
+
+
 		$counters_node .= "	
+
+
+
 							var counter = '<ul class= \"boxCounters_ul\">';
+
+
+
  
+
+
+
 							counter += '<li style=\"margin-left:2px\"><fb:like send=\"false\" layout=\"box_count\" show_faces=\"false\" font=\"\"></fb:like></li>';
 
 							counter +=' <li style=\"margin-left:0px\"><iframe width=\"100%\" scrolling=\"no\" frameborder=\"0\" title=\"+1\" vspace=\"0\" tabindex=\"-1\" style=\"position: static; left: 0pt; top: 0pt; width: 60px; margin: 0px; border-style: none; visibility: visible; height: 60px;\" src=\"https://plusone.google.com/_/+1/fastbutton?url='+url+'&amp;size=tall&amp;count=true&amp;hl=en-US&amp;jsh=m%3B%2F_%2Fapps-static%2F_%2Fjs%2Fgapi%2F__features__%2Frt%3Dj%2Fver%3Dt1NEBxIt2Qs.es_419.%2Fsv%3D1%2Fam%3D!Xq7AzNfn9_-I0e5PyA%2Fd%3D1%2F#id=I1_1328906079806&amp;parent='+url+'&amp;rpctoken=615138222&amp;_methods=onPlusOne%2C_ready%2C_close%2C_open%2C_resizeMe%2C_renderstart\" name=\"I1_1328906079806\" marginwidth=\"0\" marginheight=\"0\" id=\"I1_1328906079806\" hspace=\"0\" allowtransparency=\"true\"></iframe></li>';	
-										
-							counter +=  '<li style=\"margin-left:-2px\"><iframe scrolling=\"no\" frameborder=\"0\" allowtransparency=\"true\" src=\"http://platform.twitter.com/widgets/tweet_button.1326407570.html#_=1328815234500&amp;_version=2&amp;count=vertical&amp;enableNewSizing=false&amp;id=twitter-widget-0&amp;lang=en&amp;original_referer=+url+&amp;size=m&amp;text='+title+'  (sociable) blogplay.com&amp;url='+url+'&amp;via=sociablesite\" class=\"twitter-share-button twitter-count-vertical\" style=\"width: 55px; height: 62px;\" title=\"Twitter Tweet Button\"></iframe></li>';
+
+
+
+ 
+
+
+
+							counter +=  '<li style=\"margin-left:-2px\"><iframe scrolling=\"no\" frameborder=\"0\" allowtransparency=\"true\" src=\"https://platform.twitter.com/widgets/tweet_button.html?_version=2&amp;count=vertical&amp;enableNewSizing=false&amp;id=twitter-widget-6&amp;lang=en&amp;original_referer='+url+'&amp;size=m&amp;text='+title+' ".$tag_counter." &amp;url='+url+'\" class=\"twitter-share-button twitter-count-vertical\" style=\"width: 55px; height: 62px;\" title=\"Twitter Tweet Button\"></iframe></li>';
 
 							counter += '</ul>';";
+
+
+
 	}
 
 
-
 	$counters_node .= "oPlugin.CreateSimpleNode('New_Id_2','Counters<br/>', counter ,".$skyscraper_options["counters"]["folded"].");				
+
+
+
 ";
 
 	return $counters_node;						
@@ -498,15 +923,13 @@ function get_counters_node(){
 
 function get_share_node(){
 
-	
-
 	global $skyscraper_options;
 
-	
+
 
 	$share_node = "";
 
-		
+
 
 	if (!empty($skyscraper_options["share"]["check"])){
 
@@ -516,9 +939,15 @@ function get_share_node(){
 
 	}
 
+
+
 	
 
+
+
 	return $share_node;
+
+
 
 }
 
@@ -532,23 +961,35 @@ function get_follow_us_node(){
 
 	if (isset($skyscraper_options["follow_us"])){
 
-	
-
 		$follow_info = empty_accounts();
 
-		 	
+
 
 		if ( $follow_info["active"] > 0 && ($follow_info["empty"] <  $follow_info["active"])){
 
+
+
 			$follow_buttons = sc_follow_links();
 
+
+
 			$follow_us_node = "oPlugin.CreateNode('New_Id_6','Follow', '',  '".$follow_buttons["follow_buttons"]."','Plano',40,140)";	
+
+
+
 		
+
+
+
 		}
+
+
 
 	}
 
 	return $follow_us_node;
+
+
 
 }
 
@@ -593,8 +1034,17 @@ function sc_follow_links($banner = 0){
 	global $skyscraper_options;
 
 	$follow_buttons = "<ul class=\'boxBanner_ul\'>";
+
+
+
 	$count_follow = 0;
+
+
+
 	
+
+
+
 	foreach($skyscraper_options["follow_us"] as $follow_us){	
 
 		$follow_us["account"]= trim($follow_us["account"]);
@@ -606,29 +1056,66 @@ function sc_follow_links($banner = 0){
 			$follow_us["account"] =  "http://".$follow_us["account"];
 
 			if ($banner==1){
+
+
+
 			
+
+
+
 				$follow_us["logo"] = "48".$follow_us["logo"];
+
+
+
 			}
 
 			$follow_buttons .=  "<li><a target=\'_blank\' rel=\'nofollow\' href=\'".$follow_us["account"]."\'><img  src=\'".SOCIABLE_HTTP_PATH."images/toolbar/".$follow_us["logo"]."\' /></a></li>";
+
+
+
 			
+
+
+
 			$count_follow++;
+
+
+
 		}
 
 	}
+
+
+
 	
+
+
+
 	$follow_buttons .= "</ul>";
 
 	$return = array();
+
+
+
 	$return["count"] = $count_follow;
+
+
+
 	$return["follow_buttons"] = $follow_buttons;
+
+
+
 	
+
+
+
 	return $return;
+
+
+
 }
 
 function share_links(){
-
-	
 
 	$url = addslashes(get_bloginfo('wpurl'));
 
@@ -638,6 +1125,10 @@ function share_links(){
 
 	global $url_shares;
 	
+	global $skyscraper_options;
+
+
+	
 
 	$page = trim(addslashes($url_shares));
 
@@ -645,18 +1136,33 @@ function share_links(){
 
 	$title = trim(addslashes($title_shared));
 
+		
+	$tag_share = '';
 	
+	if (isset($skyscraper_options["blogplay_tags"])){
+	
+		if (!empty($skyscraper_options["blogplay_tags"])){
+			
+			$tag_share = '{blogplay.com}';
+		}
+	}
+
 
 	$share_links = array();
 
 	$share_links = array(
 
 
+
 		"twitter" => array('favicon' => 't.png',
 
-            				'url' => 'http://twitter.com/intent/tweet?text='.urlencode($title).' - '.urlencode($url).' '.urlencode("{sociable}").' blogplay.com&via=sociablesite',
+            				'url' => 'http://twitter.com/intent/tweet?text='.urlencode($title).' - '.urlencode($url).' '.urlencode($tag_share).' ',
 
-							 'title' => "Share on Twitter"),
+							 'title' => "Share on Twitter",
+
+
+
+							 'blank' => '_blank'				),
 
             				
 
@@ -664,7 +1170,11 @@ function share_links(){
 
 							'url' => 'http://www.facebook.com/share.php?u='.$permalink.'&amp;t='.$title.'',
 
-							 'title' => "Share on Facebook"),
+							 'title' => "Share on Facebook",
+
+
+
+							 'blank' => '_blank'				),
 
 							
 
@@ -672,7 +1182,11 @@ function share_links(){
 
 						'url' => 'https://mail.google.com/mail/?view=cm&fs=1&to&su='.$title.'&body='.$permalink.'&ui=2&tf=1&shva=1',
 
-							 'title' => "Share on Gmail"),
+							 'title' => "Share on Gmail",
+
+
+
+							 'blank' => '_blank'				),
 
 							
 
@@ -680,7 +1194,11 @@ function share_links(){
 
 			 			     'url' => 'http://inbound.org/?url='.$permalink.'&title='.$title.'',
 
-							 'title' => "Share on inbound.org"),
+							 'title' => "Share on inbound.org",
+
+
+
+							 'blank' => '_blank'				),
 
 							
 
@@ -688,7 +1206,11 @@ function share_links(){
 
 			 			   'url' => 'http://www.stumbleupon.com/submit?url='.$permalink.'&title='.$title.'',
 
-							'title' => "Share on StumpleUpon"),
+							'title' => "Share on StumpleUpon",
+
+
+
+							 'blank' => '_blank'				),
 
 							
 
@@ -696,7 +1218,11 @@ function share_links(){
 
 							 'url' => 'http://delicious.com/post?url='.$permalink.'&amp;title='.$title.'&amp;notes=EXCERPT',
 
-							 "title" => "Share on delicious"),
+							 "title" => "Share on delicious",
+
+
+
+							 'blank' => '_blank'				),
 
 							
 
@@ -704,7 +1230,11 @@ function share_links(){
 
 							'url' => 'http://www.google.com/reader/link?url='.$permalink.'&amp;title='.$title.'&amp;srcURL='.$permalink.'&amp;srcTitle='.$blogname.'',
 
-							"title" => "Share on Google Reader"),
+							"title" => "Share on Google Reader",
+
+
+
+							 'blank' => '_blank'				),
 
 		
 
@@ -712,29 +1242,79 @@ function share_links(){
 
 							'url' => 'http://www.linkedin.com/shareArticle?mini=true&amp;url='.$permalink.'&amp;title='.$title.'&amp;source='.$blogname.'&amp;summary=EXCERPT',
 
-							"title" => "Share on LinkedIn")
+							"title" => "Share on LinkedIn",
+
+
+
+							 'blank' => '_blank'				),
+
+
 
 	
+
+
+
+		"pinterest" => array('favicon' => 'pinterest.png',
+
+							'url' => 'http://pinterest.com/pin/create/button/?url='.$permalink.'',
+
+							"title" => "Share on Pinterest",
+
+
+
+							 'blank' => '_blank'						),
+
+
+
+							
+
+
+
+		"favorites" => array('favicon' => 'fv.png',
+
+
+
+			 			     'url' => 'javascript:AddToFavorites();',
+
+
+
+							 'title' => "Add to favorites - doesn\"t work in Chrome",
+
+
+
+							 'blank' => '_self'	)
+
+
+
+							 					
+
+
 
 	);
 
-	
+	 
 
 	$share_buttons = "";
 
+	foreach($share_links as $link){
+
+
+
  
 
-	foreach($share_links as $link){
+
 
 		
 
-		$share_buttons .=  "<a target=\'_blank\' rel=\'nofollow\' href=\'".addslashes($link["url"])."\' title=\'".addslashes($link["title"])."\'><img  src=\'".SOCIABLE_HTTP_PATH."images/toolbar/".addslashes($link["favicon"])."\' /></a>";
+
+
+		$share_buttons .=  "<a target=\'".$link["blank"]."\'  rel=\'nofollow\' href=\'".addslashes($link["url"])."\' title=\'".addslashes($link["title"])."\'><img  src=\'".SOCIABLE_HTTP_PATH."images/toolbar/".addslashes($link["favicon"])."\' /></a>";
 
 	}
 
-		
-
 	return $share_buttons;
+
+
 
 }
 
@@ -767,6 +1347,7 @@ function auto_skyscraper($content, $admin = false){
 	global $skyscraper_options;
 
 
+
 	if ($admin){
 
 		$content =  skyscraper_html();
@@ -785,10 +1366,8 @@ function auto_skyscraper($content, $admin = false){
 
     }
 
-	echo "<pre>";
-	print_r ($skyscraper_options["locations"]);
-	echo "</pre>";
-	
+
+
 	 
 
     if( ! isset( $skyscraper_options['locations'] ) || ! is_array( $skyscraper_options['locations'] ) || empty( $skyscraper_options['locations'] ) ){
@@ -834,8 +1413,6 @@ function auto_skyscraper($content, $admin = false){
         if( $location == 'is_single' ){
 
             //If we are not in a post, lets ignore this one for now
-
-
 
             if( is_single() && get_post_type() == 'post' ){
 
