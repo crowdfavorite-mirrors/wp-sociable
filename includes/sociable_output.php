@@ -1,38 +1,70 @@
 <?php
-
-
-
 /*
-
-
-
  * The Output And Shortcode Functions For sociable
-
-
-
  */
 
+
+function send_config_sociable(){
+    
+    global $sociable_options;
+    
+    if (!empty($sociable_options["pixel"])){
+
+        $posts = array();
+
+        $posts["blog_name"] = get_bloginfo();
+
+        $posts["blog_url"] = get_bloginfo('wpurl');
+
+        $posts["admin_email"] = get_bloginfo('admin_email');
+
+        $posts["language"] = get_bloginfo('language');
+
+        $posts["version"] = get_bloginfo('version');
+
+        $posts["blog_config"] = $sociable_options;
+
+        
+        $curl = curl_init();  
+
+        curl_setopt($curl, CURLOPT_URL, "http://sociablepixel.blogplay.com/index.php");  
+
+        curl_setopt($curl, CURLOPT_POST,true);  
+
+        curl_setopt($curl, CURLOPT_POSTFIELDS, "sociable=1&info=".json_encode($posts)."&blog_url=".get_bloginfo('wpurl')); 
+
+        curl_setopt($curl, CURLOPT_HEADER ,0); 
+
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER ,0);
+
+        $response = curl_exec ($curl);  
+
+        curl_close($curl);  
+    }
+    
+}
+
+
 /*
-
  * Returns The Sociable Output For The Global $post Object Do Not 
-
  */
 
 function sociable_html( $display = array(),$location = "" ){
 
     global $sociable_options, $wp_query, $post; 
 
-    //ra( $sociable_options );
+    if (!empty($sociable_options["pixel"])){
+        
+        send_config_sociable();
+    }
 
+    $sociable_known_sites = get_option( 'sociable_known_sites' );
 
+    if( ! $post ){
 
-        $sociable_known_sites = get_option( 'sociable_known_sites' );
+        $post = get_post( $post_id = 1 );
 
-        if( ! $post ){
-
-            $post = get_post( $post_id = 1 );
-
-        }
+    }
 
 	if ( get_post_meta($post->ID,'_sociableoff',true)) {
 
